@@ -11,7 +11,11 @@ import {
 import PrimaryButton from '@/components/common/PrimaryButton';
 import {Keyboard} from 'react-native';
 
+import useAuth from '@/hooks/apis/useAuth';
+
 export default function LoginScreen() {
+  const {loginMutation} = useAuth();
+
   const [inputs, setInputs] = React.useState({
     email: '',
     password: '',
@@ -22,8 +26,19 @@ export default function LoginScreen() {
     Keyboard.dismiss();
   }
 
-  function onLogin() {
-    // navigation.navigate('Diary');
+  async function onLogin() {
+    loginMutation.mutate(inputs, {
+      onError: (error: any) => {
+        if (error.code === 'auth/email-already-in-use') {
+          console.log('That email address is already in use!');
+        }
+
+        if (error.code === 'auth/invalid-email') {
+          console.log('That email address is invalid!');
+          console.error(error);
+        }
+      },
+    });
   }
 
   return (

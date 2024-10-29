@@ -1,17 +1,16 @@
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
-import AuthStackNavigator from '@/navigations/stack/AuthStackNavigator';
-import HomeTabNavigator from '@/navigations/tab/HomeTabNavigator';
-
-// import HomeTabNavigator from '@/navigations/tab/HomeTabNavigator';
+import {QueryClientProvider} from '@tanstack/react-query';
+import queryClient from '@/apis';
+import RootNavigator from '@/navigations/RootNavigator';
 
 function App() {
-  const isLogin = false;
-
   return (
-    <NavigationContainer>
-      {isLogin ? <HomeTabNavigator /> : <AuthStackNavigator />}
-    </NavigationContainer>
+    <QueryClientProvider client={queryClient}>
+      <NavigationContainer>
+        <RootNavigator />
+      </NavigationContainer>
+    </QueryClientProvider>
   );
 }
 

@@ -13,7 +13,7 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		1A4F916B401925BD4F3840D0 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */; };
 		269AA53A764D3929DEACAD79 /* Pods_eachday.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A473ABA60F31B7979DC6C2A1 /* Pods_eachday.framework */; };
-		37B1800C2CD04F5B00C469A0 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 37B1800B2CD04F5B00C469A0 /* GoogleService-Info.plist */; };
+		372694FC2CD10C5600071FEF /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 372694FB2CD10C5600071FEF /* GoogleService-Info.plist */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		F889D0B502B25BEE685937E1 /* Pods_eachday_eachdayTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF2667D31FDA85A6FDBA7AE2 /* Pods_eachday_eachdayTests.framework */; };
 /* End PBXBuildFile section */
@@ -41,7 +41,8 @@
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = eachday/main.m; sourceTree = "<group>"; };
 		13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = PrivacyInfo.xcprivacy; path = eachday/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		2AF65552C5D10D8249FD6080 /* Pods-eachday-eachdayTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-eachday-eachdayTests.release.xcconfig"; path = "Target Support Files/Pods-eachday-eachdayTests/Pods-eachday-eachdayTests.release.xcconfig"; sourceTree = "<group>"; };
-		37B1800B2CD04F5B00C469A0 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		372694FA2CD10BAF00071FEF /* eachday.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = eachday.entitlements; path = eachday/eachday.entitlements; sourceTree = "<group>"; };
+		372694FB2CD10C5600071FEF /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = eachday/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		87E02BBBE97F240858CC85CE /* Pods-eachday.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-eachday.debug.xcconfig"; path = "Target Support Files/Pods-eachday/Pods-eachday.debug.xcconfig"; sourceTree = "<group>"; };
 		A473ABA60F31B7979DC6C2A1 /* Pods_eachday.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_eachday.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -90,6 +91,7 @@
 		13B07FAE1A68108700A75B9A /* eachday */ = {
 			isa = PBXGroup;
 			children = (
+				372694FA2CD10BAF00071FEF /* eachday.entitlements */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
@@ -97,7 +99,7 @@
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
 				13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */,
-				37B1800B2CD04F5B00C469A0 /* GoogleService-Info.plist */,
+				372694FB2CD10C5600071FEF /* GoogleService-Info.plist */,
 			);
 			name = eachday;
 			sourceTree = "<group>";
@@ -249,7 +251,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
-				37B1800C2CD04F5B00C469A0 /* GoogleService-Info.plist in Resources */,
+				372694FC2CD10C5600071FEF /* GoogleService-Info.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				1A4F916B401925BD4F3840D0 /* PrivacyInfo.xcprivacy in Resources */,
 			);
@@ -487,7 +489,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = eachday/eachday.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 7YM75J8UJJ;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = eachday/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
@@ -501,7 +505,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.eachday;
 				PRODUCT_NAME = eachday;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -515,7 +519,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = eachday/eachday.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 7YM75J8UJJ;
 				INFOPLIST_FILE = eachday/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -528,7 +534,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.eachday;
 				PRODUCT_NAME = eachday;
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
