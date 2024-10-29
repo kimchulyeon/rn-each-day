@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "700342580357",
+    "project_id": "eachday-8e423",
+    "storage_bucket": "eachday-8e423.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:700342580357:android:7b469e97927ba68dce25ec",
+        "android_client_info": {
+          "package_name": "com.eachday"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAkztIzepiNDkP1X49yE8OEL9b35HspRLg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -6,7 +6,7 @@ import HomeTabNavigator from '@/navigations/tab/HomeTabNavigator';
 // import HomeTabNavigator from '@/navigations/tab/HomeTabNavigator';
 
 function App() {
-  const isLogin = true;
+  const isLogin = false;
 
   return (
     <NavigationContainer>

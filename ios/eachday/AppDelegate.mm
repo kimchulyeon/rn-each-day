@@ -1,11 +1,15 @@
 #import "AppDelegate.h"
-
 #import <React/RCTBundleURLProvider.h>
+// FIREBASE
+#import <Firebase.h>
 
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+  // FIREBASE
+  [FIRApp configure];
+  
   self.moduleName = @"eachday";
   // You can add your custom initial props in the dictionary below.
   // They will be passed down to the ViewController used by React Native.
