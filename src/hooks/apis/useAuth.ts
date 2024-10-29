@@ -6,7 +6,7 @@ import useUserStore from '@/store/userStore';
 function useLogin() {
   const {setIsLogin} = useUserStore();
 
-  return useMutation<any, Error, {email: string; password: string}>({
+  return useMutation<void, Error, {email: string; password: string}>({
     mutationFn: ({email, password}) => loginWithEmail(email, password),
     onSuccess: () => {
       setIsLogin(true);
@@ -17,7 +17,7 @@ function useLogin() {
 function useLogout() {
   const {setIsLogin} = useUserStore();
 
-  return useMutation<any, Error, null>({
+  return useMutation<void, Error, void>({
     mutationFn: logout,
     onSuccess: () => {
       setIsLogin(false);

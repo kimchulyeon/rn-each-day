@@ -7,6 +7,7 @@ import {
   TextInput,
   TouchableWithoutFeedback,
   View,
+  Alert,
 } from 'react-native';
 import PrimaryButton from '@/components/common/PrimaryButton';
 import {Keyboard} from 'react-native';
@@ -29,13 +30,17 @@ export default function LoginScreen() {
   async function onLogin() {
     loginMutation.mutate(inputs, {
       onError: (error: any) => {
+        console.log(error.code);
         if (error.code === 'auth/email-already-in-use') {
-          console.log('That email address is already in use!');
+          Alert.alert('이미 사용 중인 이메일 주소입니다.');
         }
 
         if (error.code === 'auth/invalid-email') {
-          console.log('That email address is invalid!');
-          console.error(error);
+          Alert.alert('유효하지 않은 이메일 주소입니다.');
+        }
+
+        if (error.code === 'auth/weak-password') {
+          Alert.alert('비밀번호는 6자 이상이어야 합니다.');
         }
       },
     });
