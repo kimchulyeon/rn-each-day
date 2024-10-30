@@ -13,9 +13,13 @@ import PrimaryButton from '@/components/common/PrimaryButton';
 import {Keyboard} from 'react-native';
 
 import useAuth from '@/hooks/apis/useAuth';
+import useUserStore from '@/store/userStore';
+import useLoadingStore from '@/store/loadingStore';
 
 export default function LoginScreen() {
   const {loginMutation} = useAuth();
+  const {setIsLogin} = useUserStore();
+  const {showLoading, hideLoading} = useLoadingStore();
 
   const [inputs, setInputs] = React.useState({
     email: '',
@@ -28,6 +32,7 @@ export default function LoginScreen() {
   }
 
   async function onLogin() {
+    showLoading();
     loginMutation.mutate(inputs, {
       onError: (error: any) => {
         console.log(error.code);
@@ -42,6 +47,12 @@ export default function LoginScreen() {
         if (error.code === 'auth/weak-password') {
           Alert.alert('비밀번호는 6자 이상이어야 합니다.');
         }
+      },
+      onSuccess: () => {
+        setIsLogin(true);
+      },
+      onSettled: () => {
+        hideLoading();
       },
     });
   }

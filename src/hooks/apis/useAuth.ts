@@ -4,13 +4,8 @@ import {loginWithEmail, logout} from '@/apis/auth';
 import useUserStore from '@/store/userStore';
 
 function useLogin() {
-  const {setIsLogin} = useUserStore();
-
   return useMutation<void, Error, {email: string; password: string}>({
     mutationFn: ({email, password}) => loginWithEmail(email, password),
-    onSuccess: () => {
-      setIsLogin(true);
-    },
   });
 }
 
