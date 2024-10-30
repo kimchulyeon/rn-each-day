@@ -1,14 +1,27 @@
 import {useMutation} from '@tanstack/react-query';
-
-import {loginWithEmail, logout} from '@/apis/auth';
+import {singupWithEmail, logout, loginWithEmail} from '@/apis/auth';
 import useUserStore from '@/store/userStore';
 
-function useLogin() {
+// 회원가입
+function useSignup() {
   return useMutation<void, Error, {email: string; password: string}>({
-    mutationFn: ({email, password}) => loginWithEmail(email, password),
+    mutationFn: ({email, password}) => singupWithEmail(email, password),
   });
 }
 
+// 로그인
+function useLogin() {
+  const {setIsLogin} = useUserStore();
+
+  return useMutation<void, Error, {email: string; password: string}>({
+    mutationFn: ({email, password}) => loginWithEmail(email, password),
+    onSuccess: () => {
+      setIsLogin(true);
+    },
+  });
+}
+
+// 로그아웃
 function useLogout() {
   const {setIsLogin} = useUserStore();
 
@@ -20,14 +33,14 @@ function useLogout() {
   });
 }
 
-function useAuth() {
-  const loginMutation = useLogin();
+export default function useAuth() {
+  const signupMutation = useSignup();
   const logoutMutation = useLogout();
+  const loginMutation = useLogin();
 
   return {
-    loginMutation,
+    signupMutation,
     logoutMutation,
+    loginMutation,
   };
 }
-
-export default useAuth;
