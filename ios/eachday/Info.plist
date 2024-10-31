@@ -51,5 +51,11 @@
 	<array>
 		<string>Ionicons.ttf</string>
 	</array>
+  <key>NSCameraUsageDescription</key>
+  <string>이 앱은 프로필 사진과 게시물 사진 촬영을 위해 카메라에 접근합니다. 멋진 순간을 기록하기 위해 카메라 접근을 허용해 주세요.</string>
+  <key>NSPhotoLibraryUsageDescription</key>
+  <string>앱에서 사진을 선택하고 업로드하기 위해 사진 라이브러리에 접근합니다.</string>
+  <key>NSPhotoLibraryAddUsageDescription</key>
+  <string>앱에서 편집한 사진을 저장하기 위해 사진 라이브러리에 접근합니다.</string>
 </dict>
 </plist>

@@ -1,5 +1,11 @@
 import React from 'react';
-import {Pressable, PressableProps, StyleSheet, Text} from 'react-native';
+import {
+  Dimensions,
+  Pressable,
+  PressableProps,
+  StyleSheet,
+  Text,
+} from 'react-native';
 import {Brown, Gray, White} from '@/constants';
 
 // const DEVICE_HEIGHT = Dimensions.get('window').height
@@ -48,13 +54,13 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   large: {
-    width: '100%',
+    width: Dimensions.get('screen').width * 0.8,
     paddingVertical: 15,
     alignItems: 'center',
     justifyContent: 'center',
   },
   medium: {
-    width: '50%',
+    width: Dimensions.get('screen').width * 0.5,
     paddingVertical: 12,
     alignItems: 'center',
     justifyContent: 'center',

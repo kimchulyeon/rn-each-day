@@ -18,6 +18,7 @@ import Input from '@/components/common/Input';
 import {Brown} from '@/constants';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {AuthStackParamList} from '@/navigations/stack/AuthStackNavigator';
+import useUserStore from '@/store/userStore';
 
 export default function LoginScreen({
   navigation,
@@ -26,6 +27,7 @@ export default function LoginScreen({
 }) {
   const {loginMutation} = useAuth();
   const {showLoading, hideLoading} = useLoadingStore();
+  const {setUserStore} = useUserStore();
 
   const [inputs, setInputs] = React.useState({
     email: '',
@@ -35,7 +37,6 @@ export default function LoginScreen({
     email: '',
     password: '',
   });
-
   const passwordRef = React.useRef<TextInput | null>(null);
 
   function onPressBackground() {
@@ -47,7 +48,6 @@ export default function LoginScreen({
     showLoading();
     loginMutation.mutate(inputs, {
       onError: (error: any) => {
-        console.log('wow', error.code);
         setErrors(prevErrors => {
           if (error.code === 'auth/invalid-credential') {
             return {
@@ -62,7 +62,16 @@ export default function LoginScreen({
         });
       },
       onSuccess: res => {
-        console.log(res);
+        const IS_FIRST_LOGIN = !res.user.displayName && !res.user.photoURL;
+
+        setUserStore({
+          email: res.user.email || inputs.email,
+          uid: res.user.uid,
+        });
+
+        if (IS_FIRST_LOGIN) {
+          navigation.navigate('Auth_SetProfile');
+        }
       },
       onSettled: hideLoading,
     });
