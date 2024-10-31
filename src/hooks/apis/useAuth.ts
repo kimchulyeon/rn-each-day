@@ -1,6 +1,7 @@
 import {useMutation} from '@tanstack/react-query';
 import {singupWithEmail, logout, loginWithEmail} from '@/apis/auth';
 import useUserStore from '@/store/userStore';
+import {FirebaseAuthTypes} from '@react-native-firebase/auth';
 
 // 회원가입
 function useSignup() {
@@ -11,7 +12,11 @@ function useSignup() {
 
 // 로그인
 function useLogin() {
-  return useMutation<void, Error, {email: string; password: string}>({
+  return useMutation<
+    FirebaseAuthTypes.UserCredential,
+    Error,
+    {email: string; password: string}
+  >({
     mutationFn: ({email, password}) => loginWithEmail(email, password),
   });
 }

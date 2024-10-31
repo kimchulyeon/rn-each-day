@@ -70,6 +70,7 @@ export default function SignupScreen({
       {
         onSuccess: () => {
           Alert.alert('회원가입 성공');
+          // TODO 사용자 닉네임, 프로필 이미지 설정 페이지로 이동
           navigation.navigate('Auth_Main');
         },
         onSettled: hideLoading,

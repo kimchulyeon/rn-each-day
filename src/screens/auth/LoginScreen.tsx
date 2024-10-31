@@ -61,7 +61,9 @@ export default function LoginScreen({
           }
         });
       },
-      onSuccess: resetErrors,
+      onSuccess: res => {
+        console.log(res);
+      },
       onSettled: hideLoading,
     });
   }
