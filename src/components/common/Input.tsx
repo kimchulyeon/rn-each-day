@@ -14,7 +14,6 @@ import {Black, Gray, Red, Brown} from '@/constants';
 interface IInputProps extends TextInputProps {
   disabled?: boolean;
   error?: string;
-  touched?: boolean;
 }
 
 const Input = forwardRef(
@@ -22,7 +21,6 @@ const Input = forwardRef(
     {
       disabled = false,
       error = '',
-      touched = false,
       onFocus,
       onBlur,
       style,
@@ -50,7 +48,7 @@ const Input = forwardRef(
             styles.container,
             isFocused && styles.focused,
             disabled && styles.disabled,
-            error && touched && styles.error,
+            error && styles.error,
             style,
           ]}>
           <TextInput
@@ -73,7 +71,7 @@ const Input = forwardRef(
             {...props}
           />
         </View>
-        {!!error && touched && <Text style={styles.errorText}>{error}</Text>}
+        {!!error && <Text style={styles.errorText}>{error}</Text>}
       </Pressable>
     );
   },

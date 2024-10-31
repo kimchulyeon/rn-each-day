@@ -12,16 +12,19 @@ import {
 } from 'react-native';
 import PrimaryButton from '@/components/common/PrimaryButton';
 import {Keyboard} from 'react-native';
-
 import useAuth from '@/hooks/apis/useAuth';
-import useUserStore from '@/store/userStore';
 import useLoadingStore from '@/store/loadingStore';
 import Input from '@/components/common/Input';
 import {Brown} from '@/constants';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {AuthStackParamList} from '@/navigations/stack/AuthStackNavigator';
 
-export default function LoginScreen() {
+export default function LoginScreen({
+  navigation,
+}: {
+  navigation: StackNavigationProp<AuthStackParamList>;
+}) {
   const {loginMutation} = useAuth();
-  const {setIsLogin} = useUserStore();
   const {showLoading, hideLoading} = useLoadingStore();
 
   const [inputs, setInputs] = React.useState({
@@ -32,10 +35,7 @@ export default function LoginScreen() {
     email: '',
     password: '',
   });
-  const [touched, setTouched] = React.useState({
-    email: false,
-    password: false,
-  });
+
   const passwordRef = React.useRef<TextInput | null>(null);
 
   function onPressBackground() {
@@ -43,8 +43,8 @@ export default function LoginScreen() {
   }
 
   async function onLogin() {
+    resetErrors();
     showLoading();
-    setErrors({email: '', password: ''});
     loginMutation.mutate(inputs, {
       onError: (error: any) => {
         console.log('wow', error.code);
@@ -61,19 +61,17 @@ export default function LoginScreen() {
           }
         });
       },
-      onSuccess: () => {
-        setErrors({email: '', password: ''});
-        setTouched({email: false, password: false});
-        setIsLogin(true);
-      },
-      onSettled: () => {
-        hideLoading();
-      },
+      onSuccess: resetErrors,
+      onSettled: hideLoading,
     });
   }
 
+  function resetErrors() {
+    setErrors({email: '', password: ''});
+  }
+
   function moveToSignup() {
-    // TODO 회원가입 화면으로 이동
+    navigation.navigate('Auth_Signup');
   }
 
   return (
@@ -92,10 +90,8 @@ export default function LoginScreen() {
             value={inputs.email}
             onChangeText={text => setInputs({...inputs, email: text})}
             error={errors.email}
-            touched={touched.email}
             placeholder="이메일"
             returnKeyType="next"
-            onFocus={() => setTouched({...touched, email: true})}
             onSubmitEditing={() => passwordRef.current?.focus()}
           />
           <Input
@@ -103,14 +99,12 @@ export default function LoginScreen() {
             value={inputs.password}
             onChangeText={text => setInputs({...inputs, password: text})}
             error={errors.password}
-            touched={touched.password}
             placeholder="비밀번호"
             secureTextEntry
-            onFocus={() => setTouched({...touched, password: true})}
             onSubmitEditing={onLogin}
           />
           <Pressable onPress={moveToSignup}>
-            <Text style={styles.signupLink}>회원하러 가기</Text>
+            <Text style={styles.signupLink}>회원가입하러 가기</Text>
           </Pressable>
           <PrimaryButton
             onPress={onLogin}

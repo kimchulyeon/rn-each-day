@@ -11,13 +11,8 @@ function useSignup() {
 
 // 로그인
 function useLogin() {
-  const {setIsLogin} = useUserStore();
-
   return useMutation<void, Error, {email: string; password: string}>({
     mutationFn: ({email, password}) => loginWithEmail(email, password),
-    onSuccess: () => {
-      setIsLogin(true);
-    },
   });
 }
 
