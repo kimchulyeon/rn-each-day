@@ -21,7 +21,8 @@ const useUserStore = create<UserStoreType>(set => ({
     uid: '',
   },
 
-  setUserStore: (user: User) => set({user}),
+  setUserStore: (user: User) =>
+    set(state => ({user: {...state.user, ...user}})),
   setIsLogin: (isLogin: boolean) => set({isLogin}),
 }));
 

@@ -13,9 +13,11 @@ import {launchImageLibrary} from 'react-native-image-picker';
 import {Brown} from '@/constants';
 import PrimaryButton from '@/components/common/PrimaryButton';
 import useUserStore from '@/store/userStore';
+import useFirestore from '@/hooks/useFirestore';
 
 export default function SetProfileScreen() {
   const {user, setUserStore} = useUserStore();
+  const {setUserDataToDB} = useFirestore();
 
   const [isAllowed, setIsAllowed] = React.useState(false);
   const [displayName, setDisplayName] = React.useState('');
@@ -73,11 +75,16 @@ export default function SetProfileScreen() {
   }
 
   async function saveProfile() {
-    setUserStore({...user, displayName, photoUrl});
-
     try {
+      console.log('DISPLAYNAME', displayName);
+      const newUserData = {...user, displayName, photoUrl};
+      console.log('newUserData : ', newUserData);
+      setUserStore({...user, displayName, photoUrl});
+      await setUserDataToDB({});
+
       Alert.alert('프로필이 성공적으로 저장되었습니다.');
     } catch (error) {
+      console.log(error);
       Alert.alert('오류', '프로필 저장에 실패했습니다.');
     }
   }
