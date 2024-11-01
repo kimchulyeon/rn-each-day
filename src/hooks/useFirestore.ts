@@ -60,16 +60,25 @@ export default function useFirestore() {
   // 앱 실행 시 AsyncStorage에 저장된 유저 데이터 가져오기
   async function loadUserDataFromAsyncStorage(): Promise<User | null> {
     // Async Storage에서 초기 사용자 데이터 로드
-    const userJsonFromAsyncStorage = await getAsyncStorage('userData');
+    const userJsonFromAsyncStorage: User = await getAsyncStorage('userData');
     if (userJsonFromAsyncStorage) {
-      console.log('userJsonFromAsyncStorage', userJsonFromAsyncStorage);
       console.log('🚀 AsyncStorage에 유저 데이터 있음');
-      updateUser(userJsonFromAsyncStorage);
-      return userJsonFromAsyncStorage;
+      //  로컬에 저장된 유저 정보가 firestore에 있는지 체크
+      const localStoredUID = userJsonFromAsyncStorage.uid;
+      const firestoreStoredUser = await getUserDataFromDB(localStoredUID);
+      if (firestoreStoredUser) {
+        updateUser(userJsonFromAsyncStorage);
+        return userJsonFromAsyncStorage;
+      } else {
+        console.log(
+          '🚀 AsyncStorage에 저장되어 있는 유저가 firestore에는 없음 : 어드민에 의해 삭제된 유저?',
+        );
+        await logout();
+        return null;
+      }
     } else {
       console.log('🚀 AsyncStorage에 유저 데이터 없음');
       // 없으면 Firestore에서 데이터 체크해서 가져오기 ( 로그아웃 호출 안하면 auth().currentUser 그대로 남아있을듯? )
-
       const userData = await getUserDataFromDB();
 
       if (userData) {

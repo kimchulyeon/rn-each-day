@@ -9,7 +9,10 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {Alert, SafeAreaView, View} from 'react-native';
-import {launchImageLibrary} from 'react-native-image-picker';
+import {
+  ImagePickerResponse,
+  launchImageLibrary,
+} from 'react-native-image-picker';
 import {Brown} from '@/constants';
 import PrimaryButton from '@/components/common/PrimaryButton';
 import {
@@ -17,9 +20,14 @@ import {
   requestPhotoLibraryPermission,
 } from '@/lib/permission';
 import useFirestore from '@/hooks/useFirestore';
+import useFirebaseStorage from '@/hooks/useFirebaseStorage';
+import useFirebaseAuth from '@/hooks/useFirebaseAuth';
+import {resizeImage} from '@/lib/resizeImage';
 
 export default function SetProfileScreen() {
   const {setUserProfile} = useFirestore();
+  const {uploadProfileImage} = useFirebaseStorage();
+  const {checkCurrentUser} = useFirebaseAuth();
 
   const [isAllowed, setIsAllowed] = React.useState(false);
   const [displayName, setDisplayName] = React.useState('');
@@ -48,15 +56,39 @@ export default function SetProfileScreen() {
       ]);
     }
 
-    launchImageLibrary({mediaType: 'photo'}, response => {
+    await launchImageLibrary({mediaType: 'photo'}, response => {
       if (response.didCancel) {
         setPhotoUrl('');
         return;
       }
-      if (response.assets) {
-        setPhotoUrl(response.assets[0].uri);
-      }
+      onConfigureProfileImage(response);
     });
+  }
+
+  async function onConfigureProfileImage(response: ImagePickerResponse) {
+    try {
+      if (!response.assets) {
+        Alert.alert('이미지를 불러오는데 실패했습니다.');
+        return;
+      }
+      const uid = checkCurrentUser()?.uid;
+      const selectedImageUri = response.assets[0].uri;
+      const resizedSelectedImageUri = await resizeImage(
+        selectedImageUri,
+        120,
+        120,
+      );
+      if (uid && resizedSelectedImageUri) {
+        const storedURL = await uploadProfileImage(
+          uid,
+          resizedSelectedImageUri,
+        );
+        setPhotoUrl(storedURL);
+      }
+    } catch (error) {
+      console.log(error);
+      // Alert.alert('프로필 이미지 설정에 실패했습니다.');
+    }
   }
 
   async function onSaveProfile() {
@@ -67,8 +99,7 @@ export default function SetProfileScreen() {
         {text: '확인', onPress: moveToHome},
       ]);
     } catch (error) {
-      console.log(error);
-      Alert.alert('오류', '프로필 저장에 실패했습니다.');
+      console.error('❌', error);
     }
   }
 

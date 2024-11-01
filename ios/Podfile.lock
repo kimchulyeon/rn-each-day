@@ -1162,6 +1162,9 @@ PODS:
   - Firebase/Firestore (11.4.0):
     - Firebase/CoreOnly
     - FirebaseFirestore (~> 11.4.0)
+  - Firebase/Storage (11.4.0):
+    - Firebase/CoreOnly
+    - FirebaseStorage (~> 11.4.0)
   - FirebaseAppCheckInterop (11.4.0)
   - FirebaseAuth (11.4.0):
     - FirebaseAppCheckInterop (~> 11.0)
@@ -1202,6 +1205,13 @@ PODS:
     - leveldb-library (~> 1.22)
     - nanopb (~> 3.30910.0)
   - FirebaseSharedSwift (11.4.0)
+  - FirebaseStorage (11.4.0):
+    - FirebaseAppCheckInterop (~> 11.0)
+    - FirebaseAuthInterop (~> 11.0)
+    - FirebaseCore (~> 11.4)
+    - FirebaseCoreExtension (~> 11.4)
+    - GoogleUtilities/Environment (~> 8.0)
+    - GTMSessionFetcher/Core (< 5.0, >= 3.4)
   - fmt (9.1.0)
   - glog (0.3.5)
   - GoogleUtilities/AppDelegateSwizzler (8.0.2):
@@ -1361,6 +1371,7 @@ PODS:
     - React-RCTText (= 0.76.0)
     - React-RCTVibration (= 0.76.0)
   - React-callinvoker (0.76.0)
+  - React-Codegen (0.1.0)
   - React-Core (0.76.0):
     - glog
     - hermes-engine
@@ -2581,6 +2592,13 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
+  - react-native-image-resizer (3.0.10):
+    - RCT-Folly
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Codegen
+    - React-Core
+    - ReactCommon/turbomodule/core
   - react-native-safe-area-context (4.13.1):
     - DoubleConversion
     - glog
@@ -2949,6 +2967,10 @@ PODS:
     - Firebase/Firestore (<= 11.4.0)
     - React-Core
     - RNFBApp
+  - RNFBStorage (21.3.0):
+    - Firebase/Storage (<= 11.4.0)
+    - React-Core
+    - RNFBApp
   - RNGestureHandler (2.20.2):
     - DoubleConversion
     - glog
@@ -3099,6 +3121,7 @@ DEPENDENCIES:
   - React-Mapbuffer (from `../node_modules/react-native/ReactCommon`)
   - React-microtasksnativemodule (from `../node_modules/react-native/ReactCommon/react/nativemodule/microtasks`)
   - react-native-image-picker (from `../node_modules/react-native-image-picker`)
+  - "react-native-image-resizer (from `../node_modules/@bam.tech/react-native-image-resizer`)"
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - React-nativeconfig (from `../node_modules/react-native/ReactCommon`)
   - React-NativeModulesApple (from `../node_modules/react-native/ReactCommon/react/nativemodule/core/platform/ios`)
@@ -3132,6 +3155,7 @@ DEPENDENCIES:
   - "RNFBApp (from `../node_modules/@react-native-firebase/app`)"
   - "RNFBAuth (from `../node_modules/@react-native-firebase/auth`)"
   - "RNFBFirestore (from `../node_modules/@react-native-firebase/firestore`)"
+  - "RNFBStorage (from `../node_modules/@react-native-firebase/storage`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNPermissions (from `../node_modules/react-native-permissions`)
   - RNScreens (from `../node_modules/react-native-screens`)
@@ -3152,12 +3176,14 @@ SPEC REPOS:
     - FirebaseFirestore
     - FirebaseFirestoreInternal
     - FirebaseSharedSwift
+    - FirebaseStorage
     - GoogleUtilities
     - "gRPC-C++"
     - gRPC-Core
     - GTMSessionFetcher
     - leveldb-library
     - nanopb
+    - React-Codegen
     - RecaptchaInterop
     - SocketRocket
 
@@ -3235,6 +3261,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/react/nativemodule/microtasks"
   react-native-image-picker:
     :path: "../node_modules/react-native-image-picker"
+  react-native-image-resizer:
+    :path: "../node_modules/@bam.tech/react-native-image-resizer"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
   React-nativeconfig:
@@ -3301,6 +3329,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-firebase/auth"
   RNFBFirestore:
     :path: "../node_modules/@react-native-firebase/firestore"
+  RNFBStorage:
+    :path: "../node_modules/@react-native-firebase/storage"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
   RNPermissions:
@@ -3328,6 +3358,7 @@ SPEC CHECKSUMS:
   FirebaseFirestore: 2ccdf893fd7e175aa8ec58faa06338b346d27db8
   FirebaseFirestoreInternal: 004452c4669d5df8869c9f8f7a24ee0009852d5b
   FirebaseSharedSwift: 505dae2d05969dbf6d43749a642bb1bf230f0252
+  FirebaseStorage: 1bf8f80ac3bb02c72844b7350e95e10be7113ef0
   fmt: 10c6e61f4be25dc963c36bd73fc7b1705fe975be
   glog: 08b301085f15bcbb6ff8632a8ebaf239aae04e6a
   GoogleUtilities: 26a3abef001b6533cf678d3eb38fd3f614b7872d
@@ -3343,6 +3374,7 @@ SPEC CHECKSUMS:
   RCTTypeSafety: 23df4344c69c602e1c5a8053a93c633af1bee825
   React: cf99f97aa57ce39ab4d3d4f396e01a3f30f3c8ad
   React-callinvoker: bec5283f86b784de5a1ba807e31cb4f177765507
+  React-Codegen: 4b8b4817cea7a54b83851d4c1f91f79aa73de30a
   React-Core: 3b131c387be8d45565fc32c6c08df7a450d8d5a8
   React-CoreModules: ac0a55891bcb72a9f8c6631128e7cbbf9ce06b65
   React-cxxreact: fec14d0078f627985b2cce98f90458e969a848ae
@@ -3367,6 +3399,7 @@ SPEC CHECKSUMS:
   React-Mapbuffer: 9264161702c6b12184ce28781d84b0e198d3e7ad
   React-microtasksnativemodule: 0f841577a56f44570294d6279a49fc80a0def59a
   react-native-image-picker: df6597d4b1878a443796be11eb2b7286ed10ece6
+  react-native-image-resizer: db7c9096ad16cd6c523707d412cb5f3c8592dc67
   react-native-safe-area-context: b7c0ac799a7718ed070974ad6d0c8045c455838a
   React-nativeconfig: 840f60c34cf1560852780811c7ca07f56e26b235
   React-NativeModulesApple: 32c2576a1b350d2f0b741aab5ded4838f07c9f20
@@ -3401,6 +3434,7 @@ SPEC CHECKSUMS:
   RNFBApp: def68a9cfa45d685d540a2934bab81bc32e8cc87
   RNFBAuth: 61486b7c8ae1c92372534d0e11b48a8bcd1829c4
   RNFBFirestore: 657546705a11a76034d7cdeb3e7c3bf5c21fd7a5
+  RNFBStorage: 66c1bf3e237a3efcc1de7280502f615411e52e88
   RNGestureHandler: 598e45cedb905b157e9764acbef0b5e365693451
   RNPermissions: 20f9fc201ee35bc51a251b0e96b417683c85d1e0
   RNScreens: f493b156fe5de2434806b5a2c410800b2cd76c0e
