@@ -62,7 +62,8 @@ export default function LoginScreen({
         });
       },
       onSuccess: res => {
-        const IS_FIRST_LOGIN = !res.user.displayName && !res.user.photoURL;
+        console.log(res.user);
+        const IS_FIRST_LOGIN = !res.user.displayName;
 
         setUserStore({
           email: res.user.email || inputs.email,

@@ -3,17 +3,21 @@ import React, {useEffect} from 'react';
 import {
   Dimensions,
   Image,
+  Linking,
   StyleSheet,
   Text,
   TouchableOpacity,
 } from 'react-native';
-import {Alert, Platform, SafeAreaView, View} from 'react-native';
-import {request, PERMISSIONS, RESULTS} from 'react-native-permissions';
+import {Alert, SafeAreaView, View} from 'react-native';
 import {launchImageLibrary} from 'react-native-image-picker';
 import {Brown} from '@/constants';
 import PrimaryButton from '@/components/common/PrimaryButton';
 import useUserStore from '@/store/userStore';
 import useFirestore from '@/hooks/useFirestore';
+import {
+  checkPhotoLibraryPermission,
+  requestPhotoLibraryPermission,
+} from '@/lib/permission';
 
 export default function SetProfileScreen() {
   const {user, setUserStore} = useUserStore();
@@ -23,44 +27,27 @@ export default function SetProfileScreen() {
   const [displayName, setDisplayName] = React.useState('');
   const [photoUrl, setPhotoUrl] = React.useState<string | undefined>();
 
-  function requestPhotoLibraryPermission() {
-    if (Platform.OS === 'android') {
-      request(PERMISSIONS.ANDROID.READ_MEDIA_IMAGES).then(status => {
-        switch (status) {
-          case RESULTS.GRANTED:
-            setIsAllowed(true);
-            break;
-          case RESULTS.LIMITED:
-            setIsAllowed(true);
-            break;
-          default:
-            setIsAllowed(false);
-            break;
-        }
-      });
-    } else if (Platform.OS === 'ios') {
-      request(PERMISSIONS.IOS.PHOTO_LIBRARY).then(status => {
-        console.log(status);
-        switch (status) {
-          case RESULTS.GRANTED:
-            setIsAllowed(true);
-            console.log('허용됨');
-            break;
-          case RESULTS.LIMITED:
-            setIsAllowed(true);
-            console.log('허용됨');
-            break;
-          default:
-            setIsAllowed(false);
-            break;
-        }
-      });
+  // 사진 라이브러리 접근 권한 확인
+  async function onPhotoLibraryPermission() {
+    const IS_ALLOWED = await checkPhotoLibraryPermission();
+    setIsAllowed(IS_ALLOWED);
+
+    if (!IS_ALLOWED) {
+      const requestStatus = await requestPhotoLibraryPermission();
+      setIsAllowed(requestStatus);
     }
   }
 
-  async function selectImage() {
+  async function onTapAddProfile() {
     if (!isAllowed) {
-      return Alert.alert('권한 필요', '사진 접근 권한이 필요합니다.');
+      return Alert.alert('권한 필요', '사진 접근 권한이 필요합니다.', [
+        {
+          text: '확인',
+          onPress: async () => {
+            await Linking.openSettings();
+          },
+        },
+      ]);
     }
 
     launchImageLibrary({mediaType: 'photo'}, response => {
@@ -74,29 +61,34 @@ export default function SetProfileScreen() {
     });
   }
 
-  async function saveProfile() {
+  async function onSaveProfile() {
     try {
-      console.log('DISPLAYNAME', displayName);
       const newUserData = {...user, displayName, photoUrl};
-      console.log('newUserData : ', newUserData);
-      setUserStore({...user, displayName, photoUrl});
-      await setUserDataToDB({});
+      setUserStore({...newUserData, photoUrl});
+      await setUserDataToDB({...newUserData, photoUrl});
 
-      Alert.alert('프로필이 성공적으로 저장되었습니다.');
+      Alert.alert('프로필이 성공적으로 저장되었습니다.', '', [
+        {text: '확인', onPress: moveToHome},
+      ]);
     } catch (error) {
       console.log(error);
       Alert.alert('오류', '프로필 저장에 실패했습니다.');
     }
   }
 
+  function moveToHome() {
+    // https://reactnavigation.org/docs/auth-flow
+    // userUserStore에서 상태값 업데이트해서 Navigator 교체 (공식 문서에서 권장?)
+  }
+
   useEffect(() => {
-    requestPhotoLibraryPermission();
+    onPhotoLibraryPermission();
   }, []);
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.profileContainer}>
-        <TouchableOpacity onPress={selectImage}>
+        <TouchableOpacity onPress={onTapAddProfile}>
           {photoUrl ? (
             <Image source={{uri: photoUrl}} style={styles.profileImage} />
           ) : (
@@ -116,7 +108,7 @@ export default function SetProfileScreen() {
 
         <PrimaryButton
           size="medium"
-          onPress={saveProfile}
+          onPress={onSaveProfile}
           label="저장"
           invalid={!displayName.trim()}
         />
