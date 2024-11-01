@@ -1,6 +1,12 @@
 import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
 
 export default function useFirebaseAuth() {
+  // 현재 로그인한 사용자 정보 가져오기
+  function checkCurrentUser() {
+    return auth().currentUser;
+  }
+
+  // 이메일로 회원가입
   function singupWithEmail(
     email: string,
     password: string,
@@ -8,6 +14,7 @@ export default function useFirebaseAuth() {
     return auth().createUserWithEmailAndPassword(email.trim(), password.trim());
   }
 
+  // 이메일로 로그인
   function loginWithEmail(
     email: string,
     password: string,
@@ -15,13 +22,9 @@ export default function useFirebaseAuth() {
     return auth().signInWithEmailAndPassword(email.trim(), password.trim());
   }
 
-  function logout() {
-    return auth().signOut();
-  }
-
   return {
+    checkCurrentUser,
     singupWithEmail,
     loginWithEmail,
-    logout,
   };
 }

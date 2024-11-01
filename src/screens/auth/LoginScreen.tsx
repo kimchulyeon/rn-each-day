@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+  Alert,
   Dimensions,
   Image,
   Pressable,
@@ -18,7 +19,7 @@ import Input from '@/components/common/Input';
 import {Brown} from '@/constants';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {AuthStackParamList} from '@/navigations/stack/AuthStackNavigator';
-import useUserStore from '@/store/userStore';
+import useFirestore from '@/hooks/useFirestore';
 
 export default function LoginScreen({
   navigation,
@@ -27,7 +28,7 @@ export default function LoginScreen({
 }) {
   const {loginMutation} = useAuth();
   const {showLoading, hideLoading} = useLoadingStore();
-  const {setUserStore} = useUserStore();
+  const {getUserDataFromDB} = useFirestore();
 
   const [inputs, setInputs] = React.useState({
     email: '',
@@ -61,17 +62,23 @@ export default function LoginScreen({
           }
         });
       },
-      onSuccess: res => {
+      onSuccess: async res => {
         console.log(res.user);
         const IS_FIRST_LOGIN = !res.user.displayName;
 
-        setUserStore({
-          email: res.user.email || inputs.email,
-          uid: res.user.uid,
-        });
-
         if (IS_FIRST_LOGIN) {
+          // 회원가입 후 첫 로그인 (프로필 설정 화면으로 이동)
           navigation.navigate('Auth_SetProfile');
+        } else {
+          // 일반 로그인 : 파이어베이스에서 uid로 유저 정보 가져오기
+          // 유저 정보가 있으면 AsyncStorage, 전역상태에 저장하고 메인 화면으로 이동
+          console.log('🚀 프로필 설정 완료 한 사용자 로그인');
+          const userData = await getUserDataFromDB(res.user.uid);
+          if (!userData) {
+            Alert.alert(
+              '유저 정보를 불러오는데 실패했습니다. 새로 회원가입해주세요.',
+            );
+          }
         }
       },
       onSettled: hideLoading,

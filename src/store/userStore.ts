@@ -1,29 +1,38 @@
+import {FirebaseFirestoreTypes} from '@react-native-firebase/firestore';
 import {create} from 'zustand';
 
 export type User = {
-  displayName?: string;
+  displayName: string;
   email: string;
-  photoUrl?: string;
   uid: string;
+  isWithdrawal: boolean;
+  createdAt: FirebaseFirestoreTypes.FieldValue;
+  deletedAt: FirebaseFirestoreTypes.FieldValue | null;
+  bookmarkedFeeds: string[];
+  photoUrl?: string;
 };
 
 type UserStoreType = {
-  user: User;
-  isLogin: boolean;
-  setUserStore: (user: User) => void;
-  setIsLogin: (isLogin: boolean) => void;
+  user: User | null;
+  updateUser: (user: User) => void;
+  resetUser: () => void;
+};
+
+const initialStates = {
+  user: null,
 };
 
 const useUserStore = create<UserStoreType>(set => ({
-  isLogin: false,
-  user: {
-    email: '',
-    uid: '',
-  },
+  // States
+  ...initialStates,
 
-  setUserStore: (user: User) =>
-    set(state => ({user: {...state.user, ...user}})),
-  setIsLogin: (isLogin: boolean) => set({isLogin}),
+  // Actions
+  updateUser: (user: User) => {
+    set({user});
+  },
+  resetUser: () => {
+    set({user: null});
+  },
 }));
 
 export default useUserStore;

@@ -1,10 +1,11 @@
 import {useMutation} from '@tanstack/react-query';
-import useUserStore from '@/store/userStore';
 import {FirebaseAuthTypes} from '@react-native-firebase/auth';
-import useFirebaseAuth from '../useFirebase';
+import useFirebaseAuth from '@/hooks/useFirebaseAuth';
+import useFirestore from '../useFirestore';
 
 export default function useAuth() {
-  const {singupWithEmail, loginWithEmail, logout} = useFirebaseAuth();
+  const {singupWithEmail, loginWithEmail} = useFirebaseAuth();
+  const {logout} = useFirestore();
 
   const signupMutation = useSignup();
   const logoutMutation = useLogout();
@@ -34,13 +35,8 @@ export default function useAuth() {
 
   // 로그아웃
   function useLogout() {
-    const {setIsLogin} = useUserStore();
-
     return useMutation<void, Error, void>({
       mutationFn: logout,
-      onSuccess: () => {
-        setIsLogin(false);
-      },
     });
   }
 

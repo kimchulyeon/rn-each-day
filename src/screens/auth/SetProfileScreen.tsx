@@ -12,16 +12,14 @@ import {Alert, SafeAreaView, View} from 'react-native';
 import {launchImageLibrary} from 'react-native-image-picker';
 import {Brown} from '@/constants';
 import PrimaryButton from '@/components/common/PrimaryButton';
-import useUserStore from '@/store/userStore';
-import useFirestore from '@/hooks/useFirestore';
 import {
   checkPhotoLibraryPermission,
   requestPhotoLibraryPermission,
 } from '@/lib/permission';
+import useFirestore from '@/hooks/useFirestore';
 
 export default function SetProfileScreen() {
-  const {user, setUserStore} = useUserStore();
-  const {setUserDataToDB} = useFirestore();
+  const {setUserProfile} = useFirestore();
 
   const [isAllowed, setIsAllowed] = React.useState(false);
   const [displayName, setDisplayName] = React.useState('');
@@ -63,9 +61,7 @@ export default function SetProfileScreen() {
 
   async function onSaveProfile() {
     try {
-      const newUserData = {...user, displayName, photoUrl};
-      setUserStore({...newUserData, photoUrl});
-      await setUserDataToDB({...newUserData, photoUrl});
+      await setUserProfile(displayName, photoUrl);
 
       Alert.alert('프로필이 성공적으로 저장되었습니다.', '', [
         {text: '확인', onPress: moveToHome},
@@ -77,6 +73,7 @@ export default function SetProfileScreen() {
   }
 
   function moveToHome() {
+    console.log('홈으로 이동 >>>>>>>>');
     // https://reactnavigation.org/docs/auth-flow
     // userUserStore에서 상태값 업데이트해서 Navigator 교체 (공식 문서에서 권장?)
   }

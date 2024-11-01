@@ -4,9 +4,9 @@ import HomeTabNavigator from './tab/HomeTabNavigator';
 import useUserStore from '@/store/userStore';
 
 function RootNavigator() {
-  const {isLogin} = useUserStore();
+  const {user} = useUserStore();
 
-  return <>{isLogin ? <HomeTabNavigator /> : <AuthStackNavigator />}</>;
+  return <>{user ? <HomeTabNavigator /> : <AuthStackNavigator />}</>;
 }
 
 export default RootNavigator;
