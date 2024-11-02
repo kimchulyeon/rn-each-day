@@ -21,18 +21,14 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import {AuthStackParamList} from '@/navigations/stack/AuthStackNavigator';
 import useFirestore from '@/hooks/useFirestore';
 
-export default function LoginScreen({
-  navigation,
-}: {
-  navigation: StackNavigationProp<AuthStackParamList>;
-}) {
+export default function LoginScreen({navigation}: {navigation: StackNavigationProp<AuthStackParamList>}) {
   const {loginMutation} = useAuth();
   const {showLoading, hideLoading} = useLoadingStore();
   const {getUserDataFromDB} = useFirestore();
 
   const [inputs, setInputs] = React.useState({
-    email: '',
-    password: '',
+    email: 'test@test.com',
+    password: '123123',
   });
   const [errors, setErrors] = React.useState({
     email: '',
@@ -75,9 +71,7 @@ export default function LoginScreen({
           console.log('🚀 프로필 설정 완료 한 사용자 로그인');
           const userData = await getUserDataFromDB(res.user.uid);
           if (!userData) {
-            Alert.alert(
-              '유저 정보를 불러오는데 실패했습니다. 새로 회원가입해주세요.',
-            );
+            Alert.alert('유저 정보를 불러오는데 실패했습니다. 새로 회원가입해주세요.');
           }
         }
       },
@@ -97,11 +91,7 @@ export default function LoginScreen({
     <TouchableWithoutFeedback onPress={onPressBackground}>
       <SafeAreaView style={styles.container}>
         <View style={styles.imgContainer}>
-          <Image
-            source={require('@/assets/eachdaylogo.webp')}
-            resizeMode="contain"
-            style={styles.image}
-          />
+          <Image source={require('@/assets/eachdaylogo.webp')} resizeMode="contain" style={styles.image} />
         </View>
 
         <View style={styles.inputContainer}>
@@ -125,11 +115,7 @@ export default function LoginScreen({
           <Pressable onPress={moveToSignup}>
             <Text style={styles.signupLink}>회원가입하러 가기</Text>
           </Pressable>
-          <PrimaryButton
-            onPress={onLogin}
-            label="로그인"
-            invalid={!inputs.email.trim() || !inputs.password.trim()}
-          />
+          <PrimaryButton onPress={onLogin} label="로그인" invalid={!inputs.email.trim() || !inputs.password.trim()} />
         </View>
       </SafeAreaView>
     </TouchableWithoutFeedback>
