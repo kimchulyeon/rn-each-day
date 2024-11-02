@@ -1,14 +1,12 @@
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import FeedStackNavigator from '../stack/FeedStackNavigator';
-import AddFeedNavigator from '../stack/AddFeedStackNavigator';
 import ProfileStackNavigator from '../stack/ProfileStackNavigator';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {Brown} from '@/constants';
 
 export type HomeTabParamList = {
   Feed: undefined;
-  Add_Post: undefined;
   Profile: undefined;
 };
 
@@ -36,14 +34,6 @@ export default function HomeTabNavigator() {
         options={{
           tabBarLabel: '',
           tabBarIcon: ({focused}) => TabBarIcon({focused, name: 'book'}),
-        }}
-      />
-      <Tab.Screen
-        name="Add_Post"
-        component={AddFeedNavigator}
-        options={{
-          tabBarLabel: '',
-          tabBarIcon: ({focused}) => TabBarIcon({focused, name: 'add-circle'}),
         }}
       />
       <Tab.Screen

@@ -1,7 +1,7 @@
 import React from 'react';
 import {Image, StyleSheet} from 'react-native';
 
-export default function FeedScreenHeader() {
+export default function HomeHeader() {
   return (
     <Image
       source={require('@/assets/eachdaytextlogo.webp')}

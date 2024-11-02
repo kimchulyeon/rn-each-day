@@ -1,20 +1,24 @@
 import React from 'react';
-import {FlatList, StyleSheet} from 'react-native';
+import {FlatList} from 'react-native';
 import FeedItem from './FeedItem';
 
 export default function FeedList() {
-  const [isRefreshing, setIsRefreshing] = React.useState(false);
+  // const [isRefreshing, setIsRefreshing] = React.useState(false);
+  const [isRefreshing] = React.useState(false);
 
-  function onEndReached() {}
+  function onEndReached() {
+    console.log('스크롤이 끝에 도달하면 다음 데이터를 페칭');
+  }
 
-  function onRefresh() {}
+  function onRefresh() {
+    console.log('새로고침 하면 새로 데이터를 페칭');
+  }
 
   return (
     <FlatList
-      data={[]}
-      renderItem={({item}) => <FeedItem />}
-      keyExtractor={item => item}
-      contentContainerStyle={styles.contentContainer}
+      data={[1]}
+      renderItem={() => <FeedItem />}
+      keyExtractor={item => item.toString()}
       onEndReached={onEndReached}
       onEndReachedThreshold={0.5}
       refreshing={isRefreshing}
@@ -23,9 +27,3 @@ export default function FeedList() {
     />
   );
 }
-
-const styles = StyleSheet.create({
-  contentContainer: {
-    padding: 20,
-  },
-});

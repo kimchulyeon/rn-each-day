@@ -1,23 +1,11 @@
 import FeedList from '@/components/feed/FeedList';
-import FeedScreenHeader from '@/components/feed/FeedScreenHeader';
-import useAuth from '@/hooks/apis/useAuth';
 import React from 'react';
-import {Button, SafeAreaView, StyleSheet} from 'react-native';
+import HomeLayout from '@/layout/HomeLayout';
 
 export default function FeedScreen() {
-  const {logoutMutation} = useAuth();
-
   return (
-    <SafeAreaView style={styles.container}>
-      <FeedScreenHeader />
+    <HomeLayout>
       <FeedList />
-      <Button title="Logout" onPress={() => logoutMutation.mutate()} />
-    </SafeAreaView>
+    </HomeLayout>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});
