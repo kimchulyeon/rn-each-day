@@ -26,3 +26,8 @@ export const Orange = {
   Primary: '#f7ae49',
   Secondary: '#f7c49b',
 } as const;
+
+export const Salgu = {
+  Primary: '#FFCC99',
+  Secondary: '#FF9966',
+};

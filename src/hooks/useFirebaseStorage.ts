@@ -14,13 +14,13 @@ export default function useFirebaseStorage() {
   async function uploadFeedImages(
     userId: string,
     feedId: string,
-    images: string[],
+    imageUris: string[],
   ) {
-    const uploadPromises = images.map(async (imageUri, index) => {
-      const fileName = `users/${userId}/feeds/${feedId}_${index}.jpg`;
+    const uploadPromises = imageUris.map(async (uri, index) => {
+      const fileName = `feeds/${userId}/${feedId}_${index}.jpg`;
       const reference = storage().ref(fileName);
 
-      await reference.putFile(imageUri);
+      await reference.putFile(uri);
       return await reference.getDownloadURL(); // 각 이미지의 다운로드 URL 반환
     });
 
