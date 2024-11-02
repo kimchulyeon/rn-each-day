@@ -3,23 +3,23 @@ import {Dimensions, FlatList, StyleSheet, View} from 'react-native';
 import FeedCarouselItem from './FeedCarouselItem';
 import FeedCarouselPagination from './FeedCarouselPagination';
 
-export default function ImageCarousel({imageData}: {imageData: any}) {
+export default function ImageCarousel({imageDatas}: {imageDatas: string[] | undefined}) {
   const [pageIndex, setPageIndex] = React.useState(0);
-  const [viewWidth, setViewWidth] = React.useState(
-    Dimensions.get('window').width,
-  );
+  const [viewWidth, setViewWidth] = React.useState(Dimensions.get('window').width);
+
+  if (!imageDatas) {
+    return null;
+  }
 
   return (
     <View style={styles.imageContainer}>
       <FlatList
-        data={imageData}
+        data={imageDatas}
         horizontal
         pagingEnabled
         showsHorizontalScrollIndicator={false}
-        keyExtractor={item => item.id}
-        renderItem={({item, index}) => (
-          <FeedCarouselItem item={item} index={index} />
-        )}
+        keyExtractor={(item, index) => `${item}_${index}`}
+        renderItem={({item}) => <FeedCarouselItem item={item} />}
         onLayout={e => {
           setViewWidth(e.nativeEvent.layout.width);
         }}
@@ -33,9 +33,7 @@ export default function ImageCarousel({imageData}: {imageData: any}) {
       />
 
       <View style={styles.paginationContainer}>
-        {imageData.length > 1 && (
-          <FeedCarouselPagination datas={imageData} pageIndex={pageIndex} />
-        )}
+        {imageDatas.length > 1 && <FeedCarouselPagination datas={imageDatas} pageIndex={pageIndex} />}
       </View>
     </View>
   );

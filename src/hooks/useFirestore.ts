@@ -1,3 +1,4 @@
+import {useState} from 'react';
 import useUserStore, {User} from '@/store/userStore';
 import auth from '@react-native-firebase/auth';
 import firestore, {FirebaseFirestoreTypes} from '@react-native-firebase/firestore';
@@ -98,8 +99,8 @@ export default function useFirestore() {
   }
 
   // ########################피드########################
-
   const FEEDS_COLLECTION = DB.collection('feeds');
+  const PAGE_SIZE = 8;
 
   // 피드 작성
   async function addFeedToDB(content: string, images: {id: string; uri: string}[]) {
@@ -119,11 +120,49 @@ export default function useFirestore() {
     }
   }
 
+  // 모든 피드 가져오기
+  async function getAllFeeds() {
+    const feeds = await FEEDS_COLLECTION.get();
+    return feeds.docs.map(doc => doc.data() as Feed);
+  }
+
+  // 마지막으로 가져온 폴더 저장
+  const [lastVisible, setLastVisible] = useState<FirebaseFirestoreTypes.DocumentSnapshot | null>(null);
+
+  // 페이징 피드 가져오기 함수
+  async function getPagedFeeds(isRefresh = false) {
+    let query = FEEDS_COLLECTION.orderBy('createdAt', 'desc').limit(PAGE_SIZE);
+
+    // 초기 아니고 마지막으로 가져온 폴더 있을 때
+    if (lastVisible && !isRefresh) {
+      console.log('🚀 가져온 마지막 폴더 다음부터 가져오게 쿼리 업데이트');
+      query = query.startAfter(lastVisible);
+    }
+
+    const snapshot = await query.get();
+    const feeds = snapshot.docs.map(doc => doc.data() as Feed);
+    console.log('🚀 피드 가져오기 >>>>>>>>>>>>>');
+
+    // 마지막 문서 업데이트
+    setLastVisible(snapshot.docs[snapshot.docs.length - 1]);
+
+    return feeds;
+  }
+
+  async function fetchInitialFeeds() {
+    console.log('🚀 초기 | 새로고침 시 피드 새로 호출');
+    setLastVisible(null);
+    return getPagedFeeds(true);
+  }
+
   return {
     logout,
     setUserProfileToDB,
     checkSession,
     getUserDataFromDB,
     addFeedToDB,
+    getAllFeeds,
+    getPagedFeeds,
+    fetchInitialFeeds,
   };
 }

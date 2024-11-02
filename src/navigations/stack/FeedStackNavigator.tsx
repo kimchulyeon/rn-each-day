@@ -10,7 +10,7 @@ import useFirestore from '@/hooks/useFirestore';
 import useLoadingStore from '@/store/loadingStore';
 
 export type FeedStackParamList = {
-  Feed_Main: undefined;
+  Feed_Main: {refresh?: boolean};
   Add_Feed: undefined;
 };
 
@@ -31,7 +31,7 @@ function AddFeedButton(navigation: StackNavigationProp<FeedStackParamList>) {
     showLoading();
     try {
       await addFeedToDB(content, images);
-      navigation.goBack();
+      navigation.navigate('Feed_Main', {refresh: true});
     } catch (error) {
       Alert.alert('피드를 올리는데 실패했습니다.');
       console.error(error);

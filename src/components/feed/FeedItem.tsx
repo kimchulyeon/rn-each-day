@@ -3,18 +3,13 @@ import {StyleSheet, View} from 'react-native';
 import FeedImageCarousel from './FeedImageCarousel';
 import FeedProfile from './FeedProfile';
 import FeedFooter from './FeedFooter';
+import {Feed} from '@/hooks/useFirestore';
 
-function FeedItem() {
-  const imageData = [
-    {id: '1', url: 'https://picsum.photos/200'},
-    {id: '2', url: 'https://picsum.photos/300'},
-    {id: '3', url: 'https://picsum.photos/220'},
-  ];
-
+function FeedItem({feed}: {feed: Feed}) {
   return (
     <View style={styles.container}>
       <FeedProfile />
-      <FeedImageCarousel imageData={imageData} />
+      <FeedImageCarousel imageDatas={feed.imageUrls} />
       <FeedFooter />
     </View>
   );

@@ -2,23 +2,16 @@ import {Brown, Gray} from '@/constants';
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
 
-export default function FeedCarouselPagination({
-  datas,
-  pageIndex,
-}: {
-  datas: any[];
-  pageIndex: number;
-}) {
+export default function FeedCarouselPagination({datas, pageIndex}: {datas: string[]; pageIndex: number}) {
   return (
     <View style={styles.container}>
-      {datas.map((_, index) => (
+      {datas.map((d, index) => (
         <View
-          key={index}
+          key={`${d}_${index}`}
           style={[
             styles.dot,
             {
-              backgroundColor:
-                pageIndex === index ? Brown.Primary : Gray.SECONDARY,
+              backgroundColor: pageIndex === index ? Brown.Primary : Gray.SECONDARY,
             },
           ]}
         />
