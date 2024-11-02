@@ -8,20 +8,20 @@ import SplashView from '@/components/common/SplashView';
 import useFirestore from '@/hooks/useFirestore';
 
 function App() {
-  const {loadUserDataFromAsyncStorage} = useFirestore();
+  const {checkSession} = useFirestore();
 
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     async function checkStoredUserData() {
       try {
-        await loadUserDataFromAsyncStorage();
+        await checkSession();
       } catch (error) {
         console.error(error);
       } finally {
         setTimeout(() => {
           setIsLoading(false);
-        }, 1000);
+        }, 800);
       }
     }
 
