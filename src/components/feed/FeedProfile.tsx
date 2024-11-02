@@ -1,18 +1,19 @@
 import React from 'react';
 import {Brown, Gray} from '@/constants';
 import {Image, StyleSheet, Text, View} from 'react-native';
+import {Feed} from '@/hooks/useFirestore';
+import useUserStore from '@/store/userStore';
 
-export default function FeedProfile() {
+export default function FeedProfile({feed}: {feed?: Feed}) {
+  const {user} = useUserStore();
+
   return (
     <View style={styles.profileContainer}>
       <View style={styles.imageWrapper}>
-        <Image
-          source={require('@/assets/example.jpeg')}
-          style={styles.profileImage}
-        />
+        <Image source={{uri: feed ? feed.profileImage : user?.photoUrl}} style={styles.profileImage} />
       </View>
       <Text style={styles.profileName} numberOfLines={1} ellipsizeMode="tail">
-        EachDay
+        {feed ? feed?.creator : user?.displayName}
       </Text>
     </View>
   );

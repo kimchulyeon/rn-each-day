@@ -6,12 +6,14 @@ import {Alert, Pressable, StyleSheet, Text} from 'react-native';
 import {Black, Gray, Salgu} from '@/constants';
 import Icon from 'react-native-vector-icons/Ionicons';
 import useFeedStore from '@/store/useFeedStore';
-import useFirestore from '@/hooks/useFirestore';
+import useFirestore, {Feed} from '@/hooks/useFirestore';
 import useLoadingStore from '@/store/loadingStore';
+import FeedDetailScreen from '@/screens/feed/FeedDetailScreen';
 
 export type FeedStackParamList = {
-  Feed_Main: {refresh?: boolean};
+  Feed_Main: {refresh?: number};
   Add_Feed: undefined;
+  Feed_Detail: {feed: Feed};
 };
 
 function AddFeedBackButton(navigation: StackNavigationProp<FeedStackParamList>) {
@@ -31,7 +33,7 @@ function AddFeedButton(navigation: StackNavigationProp<FeedStackParamList>) {
     showLoading();
     try {
       await addFeedToDB(content, images);
-      navigation.navigate('Feed_Main', {refresh: true});
+      navigation.navigate('Feed_Main', {refresh: Date.now()});
     } catch (error) {
       Alert.alert('피드를 올리는데 실패했습니다.');
       console.error(error);
@@ -75,6 +77,15 @@ export default function FeedStackNavigator({navigation}: {navigation: StackNavig
           headerStyle: {backgroundColor: Gray.LIGHT},
           headerLeft: () => AddFeedBackButton(navigation),
           headerRight: () => AddFeedButton(navigation),
+        }}
+      />
+      <Stack.Screen
+        name="Feed_Detail"
+        component={FeedDetailScreen}
+        options={{
+          headerTitle: '',
+          headerLeft: () => AddFeedBackButton(navigation),
+          headerRight: () => null,
         }}
       />
     </Stack.Navigator>

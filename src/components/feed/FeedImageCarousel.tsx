@@ -2,13 +2,14 @@ import React from 'react';
 import {Dimensions, FlatList, StyleSheet, View} from 'react-native';
 import FeedCarouselItem from './FeedCarouselItem';
 import FeedCarouselPagination from './FeedCarouselPagination';
+import PlaceholderImage from '../common/PlaceholderImage';
 
 export default function ImageCarousel({imageDatas}: {imageDatas: string[] | undefined}) {
   const [pageIndex, setPageIndex] = React.useState(0);
   const [viewWidth, setViewWidth] = React.useState(Dimensions.get('window').width);
 
-  if (!imageDatas) {
-    return null;
+  if (!imageDatas || imageDatas.length === 0) {
+    return <PlaceholderImage />;
   }
 
   return (

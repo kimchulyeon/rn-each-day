@@ -21,6 +21,8 @@ export type Feed = {
   content: string;
   imageUrls?: string[];
   creator: string;
+  profileImage: string;
+  uid: string;
   createdAt: FirebaseFirestoreTypes.FieldValue;
   deletedAt: FirebaseFirestoreTypes.FieldValue | null;
   likeCount?: number;
@@ -107,7 +109,9 @@ export default function useFirestore() {
     if (CURRENT_USER_UID) {
       const newFeed: Feed = {
         content,
-        creator: CURRENT_USER_UID,
+        creator: CURRENT_USER.displayName || '',
+        uid: CURRENT_USER_UID,
+        profileImage: CURRENT_USER.photoURL || '',
         createdAt: firebaseFirestore.firestore.FieldValue.serverTimestamp(),
         deletedAt: null,
       };

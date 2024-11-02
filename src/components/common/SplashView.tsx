@@ -1,3 +1,4 @@
+import {White} from '@/constants';
 import React from 'react';
 import {Dimensions, Image, StyleSheet, View} from 'react-native';
 
@@ -14,6 +15,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: White.DEFAULT,
   },
   logo: {
     width: Dimensions.get('screen').width * 0.8,

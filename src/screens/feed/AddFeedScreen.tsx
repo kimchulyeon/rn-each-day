@@ -3,7 +3,17 @@ import AddFeedSelectedImageView from '@/components/feed/AddFeedSelectedImageView
 import FeedProfile from '@/components/feed/FeedProfile';
 import {Gray, Salgu} from '@/constants';
 import useFeedStore from '@/store/useFeedStore';
-import {Alert, Pressable, SafeAreaView, StyleSheet, Text, TextInput, View} from 'react-native';
+import {
+  Alert,
+  Keyboard,
+  Pressable,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
 import {launchImageLibrary} from 'react-native-image-picker';
 import {resizeImage} from '@/lib/resizeImage';
 
@@ -45,17 +55,20 @@ export default function AddFeedScreen() {
       <View style={styles.header}>
         <FeedProfile />
       </View>
-      <View style={styles.inputContainer}>
-        <TextInput
-          value={content}
-          onChangeText={updateContent}
-          placeholder="오늘은 무슨 일이 있었나요?"
-          multiline
-          autoCapitalize="none"
-          spellCheck={false}
-          autoCorrect={false}
-        />
-      </View>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={styles.inputContainer}>
+          <TextInput
+            autoFocus
+            value={content}
+            onChangeText={updateContent}
+            placeholder="오늘은 무슨 일이 있었나요?"
+            multiline
+            autoCapitalize="none"
+            spellCheck={false}
+            autoCorrect={false}
+          />
+        </View>
+      </TouchableWithoutFeedback>
       {images.length < IMAGE_LIMIT && (
         <Pressable style={styles.addImageButton} onPress={onAddImage}>
           <Text style={styles.addImageText}>사진 추가</Text>
