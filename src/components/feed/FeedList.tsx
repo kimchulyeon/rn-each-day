@@ -16,7 +16,7 @@ export default function FeedList() {
 
   return (
     <FlatList
-      data={[1]}
+      data={[1, 2, 3]}
       renderItem={() => <FeedItem />}
       keyExtractor={item => item.toString()}
       onEndReached={onEndReached}
