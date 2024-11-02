@@ -3,7 +3,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import FeedStackNavigator from '../stack/FeedStackNavigator';
 import ProfileStackNavigator from '../stack/ProfileStackNavigator';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {Brown} from '@/constants';
+import {Brown, Gray} from '@/constants';
 
 export type HomeTabParamList = {
   Feed: undefined;
@@ -13,9 +13,9 @@ export type HomeTabParamList = {
 const TabBarIcon = ({focused, name}: {focused: boolean; name: string}) => (
   <>
     {focused ? (
-      <Icon name={name} size={30} color={Brown.Primary} />
+      <Icon name={name} size={30} color={Brown.Secondary} />
     ) : (
-      <Icon name={`${name}-outline`} size={30} color={Brown.Secondary} />
+      <Icon name={`${name}-outline`} size={30} color={Gray.SECONDARY} />
     )}
   </>
 );

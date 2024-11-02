@@ -1,8 +1,9 @@
 import useUserStore, {User} from '@/store/userStore';
 import auth from '@react-native-firebase/auth';
-import firestore from '@react-native-firebase/firestore';
+import firestore, {FirebaseFirestoreTypes} from '@react-native-firebase/firestore';
 import {firebase as firebaseFirestore} from '@react-native-firebase/firestore';
 import {getAsyncStorage, removeAsyncStorage, storeAsyncStorage} from '@/lib/asyncStorage';
+import useFirebaseStorage from './useFirebaseStorage';
 
 export type UserFieldType = {
   displayName?: string;
@@ -10,22 +11,33 @@ export type UserFieldType = {
   photoUrl?: string;
   followingsCount?: number;
   followersCount?: number;
-  createdAt?: any;
+  createdAt?: FirebaseFirestoreTypes.FieldValue;
   isWithdrawal?: boolean;
   bookmarkdedFeeds?: string[];
 };
 
+export type Feed = {
+  content: string;
+  imageUrls?: string[];
+  creator: string;
+  createdAt: FirebaseFirestoreTypes.FieldValue;
+  deletedAt: FirebaseFirestoreTypes.FieldValue | null;
+  likeCount?: number;
+  commentCount?: number;
+};
+
 export default function useFirestore() {
   const {updateUser, resetUser} = useUserStore();
+  const {uploadFeedImages} = useFirebaseStorage();
 
+  // #######################유저########################
   const DB = firestore();
   const USERS_COLLECTION = DB.collection('users');
   const CURRENT_USER = auth().currentUser;
   const CURRENT_USER_UID = CURRENT_USER?.uid;
-  // const FEEDS_COLLECTION = DB.collection('feeds');
 
   // 최초 로그인 + 프로필 설정 시 유저 데이터 설정
-  async function setUserProfile(displayName: string, photoUrl: string | undefined = '') {
+  async function setUserProfileToDB(displayName: string, photoUrl: string | undefined = '') {
     if (CURRENT_USER) {
       console.log('🚀 최초 유저 정보 firestore에 저장');
       // 유저 전역상태 + firestore에 유저 데이터 저장 + AsyncStorage에 유저 데이터 저장
@@ -85,10 +97,33 @@ export default function useFirestore() {
     resetUser();
   }
 
+  // ########################피드########################
+
+  const FEEDS_COLLECTION = DB.collection('feeds');
+
+  // 피드 작성
+  async function addFeedToDB(content: string, images: {id: string; uri: string}[]) {
+    if (CURRENT_USER_UID) {
+      const newFeed: Feed = {
+        content,
+        creator: CURRENT_USER_UID,
+        createdAt: firebaseFirestore.firestore.FieldValue.serverTimestamp(),
+        deletedAt: null,
+      };
+      const feedRef = await FEEDS_COLLECTION.add(newFeed);
+      const feedId = feedRef.id;
+
+      const storedImageUrls = await uploadFeedImages(CURRENT_USER_UID, feedId, images);
+      await feedRef.update({id: feedId, imageUrls: storedImageUrls});
+      return feedId;
+    }
+  }
+
   return {
     logout,
-    setUserProfile,
+    setUserProfileToDB,
     checkSession,
     getUserDataFromDB,
+    addFeedToDB,
   };
 }

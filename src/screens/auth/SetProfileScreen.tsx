@@ -1,31 +1,18 @@
 import Input from '@/components/common/Input';
 import React, {useEffect} from 'react';
-import {
-  Dimensions,
-  Image,
-  Linking,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-} from 'react-native';
+import {Dimensions, Image, Linking, StyleSheet, Text, TouchableOpacity} from 'react-native';
 import {Alert, SafeAreaView, View} from 'react-native';
-import {
-  ImagePickerResponse,
-  launchImageLibrary,
-} from 'react-native-image-picker';
+import {ImagePickerResponse, launchImageLibrary} from 'react-native-image-picker';
 import {Brown} from '@/constants';
 import PrimaryButton from '@/components/common/PrimaryButton';
-import {
-  checkPhotoLibraryPermission,
-  requestPhotoLibraryPermission,
-} from '@/lib/permission';
+import {checkPhotoLibraryPermission, requestPhotoLibraryPermission} from '@/lib/permission';
 import useFirestore from '@/hooks/useFirestore';
 import useFirebaseStorage from '@/hooks/useFirebaseStorage';
 import useFirebaseAuth from '@/hooks/useFirebaseAuth';
 import {resizeImage} from '@/lib/resizeImage';
 
 export default function SetProfileScreen() {
-  const {setUserProfile} = useFirestore();
+  const {setUserProfileToDB} = useFirestore();
   const {uploadProfileImage} = useFirebaseStorage();
   const {checkCurrentUser} = useFirebaseAuth();
 
@@ -73,16 +60,9 @@ export default function SetProfileScreen() {
       }
       const uid = checkCurrentUser()?.uid;
       const selectedImageUri = response.assets[0].uri;
-      const resizedSelectedImageUri = await resizeImage(
-        selectedImageUri,
-        120,
-        120,
-      );
+      const resizedSelectedImageUri = await resizeImage(selectedImageUri, 120, 120);
       if (uid && resizedSelectedImageUri) {
-        const storedURL = await uploadProfileImage(
-          uid,
-          resizedSelectedImageUri,
-        );
+        const storedURL = await uploadProfileImage(uid, resizedSelectedImageUri);
         setPhotoUrl(storedURL);
       }
     } catch (error) {
@@ -93,11 +73,9 @@ export default function SetProfileScreen() {
 
   async function onSaveProfile() {
     try {
-      await setUserProfile(displayName, photoUrl);
+      await setUserProfileToDB(displayName, photoUrl);
 
-      Alert.alert('프로필이 성공적으로 저장되었습니다.', '', [
-        {text: '확인', onPress: moveToHome},
-      ]);
+      Alert.alert('프로필이 성공적으로 저장되었습니다.', '', [{text: '확인', onPress: moveToHome}]);
     } catch (error) {
       console.error('❌', error);
     }
@@ -134,12 +112,7 @@ export default function SetProfileScreen() {
           onChangeText={setDisplayName}
         />
 
-        <PrimaryButton
-          size="medium"
-          onPress={onSaveProfile}
-          label="저장"
-          invalid={!displayName.trim()}
-        />
+        <PrimaryButton size="medium" onPress={onSaveProfile} label="저장" invalid={!displayName.trim()} />
       </View>
     </SafeAreaView>
   );
