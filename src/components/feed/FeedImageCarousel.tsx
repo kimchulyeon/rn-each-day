@@ -5,6 +5,9 @@ import FeedCarouselPagination from './FeedCarouselPagination';
 
 export default function ImageCarousel({imageData}: {imageData: any}) {
   const [pageIndex, setPageIndex] = React.useState(0);
+  const [viewWidth, setViewWidth] = React.useState(
+    Dimensions.get('window').width,
+  );
 
   return (
     <View style={styles.imageContainer}>
@@ -17,11 +20,12 @@ export default function ImageCarousel({imageData}: {imageData: any}) {
         renderItem={({item, index}) => (
           <FeedCarouselItem item={item} index={index} />
         )}
+        onLayout={e => {
+          setViewWidth(e.nativeEvent.layout.width);
+        }}
         onScroll={e => {
           const contentOffsetX = e.nativeEvent.contentOffset.x;
-          const currentIndex = Math.floor(
-            contentOffsetX / Dimensions.get('window').width,
-          );
+          const currentIndex = Math.floor(contentOffsetX / viewWidth);
           // 0 ~ 2로 제한
           const clampedIndex = Math.max(0, Math.min(2, currentIndex));
           setPageIndex(clampedIndex);
